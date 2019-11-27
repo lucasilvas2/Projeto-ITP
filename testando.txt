@@ -1,0 +1,9 @@
+image 600 400
+clear 0 0 0
+color 64 78 45
+line 0 400 600 200
+polygon 3 0 400 300 200 600 400
+circle 300 100 50
+
+
+
