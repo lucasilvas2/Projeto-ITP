@@ -1,9 +1,10 @@
 image 600 400
 clear 0 0 0
-color 64 78 45
-line 0 400 600 200
-polygon 3 0 400 300 200 600 400
-circle 300 100 50
-
-
+color 100 170 200
+line 0 399 599 200
+polygon 3 0 399 300 200 599 399
+circle 200 100 50
+color 180 30 50
+fill 200 100
+save testando.ppm
 

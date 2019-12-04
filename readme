@@ -1,0 +1,27 @@
+● O que foi feito (o básico e as funcionalidades extras implementadas); ======
+Foram criadas as structs e as fuções para criar os desenhos: linha, círculo e polígono; criadas as funções pintapixel e preencher, que passam a cor para os desenhos e preenchem a imagem, respectivamente, e os arquivos func.h e func.c.
+
+● O que não foi feito (caso não tenha sido possível implementar alguma funcionalidade);=========
+A príncipio pensamos em usar a biblioteca "graphics.h" para fazer a reta, o polígono e o círculo, porém não conseguimos implementar a biblioteca no repl.it, nem no terminal.
+
+● O que seria feito diferentemente (quando aprendemos à medida que vamos implementando, por vezes vemos que podíamos ter implementado algo de forma
+diferente. Assim, esse tópico é para vocês refletirem sobre o que vocês aprenderam durante o processo que, se fossem fazer o mesmo projeto novamente, fariam diferente);========
+xxxxxx???
+
+● Como compilar o projeto, deixando explícito se foi utilizada alguma biblioteca externa que precise ser instalada, que versão e quais parâmetros extras 
+são necessários para o compilador. ========
+O código foi feito no site repl.it e depois adptado para rodar no terminal. É necessário usar a biblioteca "func.h", criada para definir as structs e os protótipos das funções. O arquivo "func.c" é onde temos a implementação das funções usadas na biblioteca.
+
+● Em caso de duplas:
+○ Identificação dos autores;
+Emerson de Almeida da Silva, 
+Lucas Silva.
+○ Contribuição de cada integrante no desenvolvimento do projeto (quem fez o
+quê).
+
+
+até aqui! daqui p baixo ignora
+Primeiramente definimos as estruturas a serem usadas:
+- uma estrutura chamada "pixel" que define os valores "r", "g" e "b" de cada pixel;
+- uma estrutura "img" com a arquitetura de uma imagem ppm (formato da imagem (PPM), altura, coluna, linhas, (char acao?) e a matriz de pixels);
+- uma estrututa "circ" com a arquitetura para criar um círculo.

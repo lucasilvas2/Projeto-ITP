@@ -1,15 +1,48 @@
 #include "func.h"
-//CRIAR IMAGEM
-/*void imag(FILE * arquivo_org,img image,img *ptrimg, pixel ** matriz_img){
-    int i;
-    fscanf(arquivo_org, "%d", &ptrimg->coluna);
-    fscanf(arquivo_org, "%d", &ptrimg->altura);
-    matriz_img = (pixel **) calloc(ptrimg->altura, sizeof(pixel*));
-    for(i = 0; i < ptrimg->altura; i++){
-        matriz_img[i] = (pixel *) calloc(ptrimg->coluna, sizeof(pixel));
-    }
+//LER DIMENSÃO
+void imag(img * ptrimagem, FILE *arquivo_org, pixel ** matriz_img){
+  fscanf(arquivo_org, "%d", &ptrimagem->coluna);
+  fscanf(arquivo_org, "%d", &ptrimagem->altura);  
+}
 
-}*/
+//FUNÇÃO CLEAR
+void clr(img imagem,pixel clear,pixel * ptrclear, FILE *arquivo_org, pixel ** matriz_img){
+  
+  fscanf(arquivo_org, "%d", &ptrclear->r);
+  fscanf(arquivo_org, "%d", &ptrclear->g);
+  fscanf(arquivo_org, "%d", &ptrclear->b);
+
+  for(int i = 0; i < imagem.altura; i++){
+    for(int j = 0; j < imagem.coluna; j++){
+      matriz_img [i][j].r = ptrclear->r;
+      matriz_img [i][j].g = ptrclear->g;
+      matriz_img [i][j].b = ptrclear->b;
+    }
+  } 
+}
+
+// FUNÇÃO PARA LEITURA DA COR
+void i_cor(img imagem, pixel color, pixel * ptrcolor, FILE * arquivo_org, pixel ** matriz_img){
+  fscanf(arquivo_org, "%d", &ptrcolor->r);
+  fscanf(arquivo_org, "%d", &ptrcolor->g);
+  fscanf(arquivo_org, "%d", &ptrcolor->b);
+}
+//FUNÇÃO GERAR IMAGEM E SALVAR
+void save(FILE *arquivo_org, img *ptrimg, pixel ** matriz_img){
+  fscanf(arquivo_org , "%s", ptrimg->nome_imagem);
+
+  FILE *gerando_imagem = fopen(ptrimg->nome_imagem, "w");
+  fputs("P3\n", gerando_imagem);
+  fprintf(gerando_imagem, "%d %d\n", ptrimg->coluna, ptrimg->altura);
+  fputs("255\n", gerando_imagem);
+
+  for(int i = 0; i < ptrimg->altura; i++){
+    for(int j = 0; j < ptrimg->coluna; j++){
+      fprintf(gerando_imagem, "%d %d %d\n", matriz_img[i][j].r, matriz_img[i][j].g, matriz_img[i][j].b);       
+    }
+  }
+  fclose(gerando_imagem);
+}
 //FUNÇÃO PARA DESENHAR LINHA
 void desenhar_linha (int x1, int y1, int x2, int y2,pixel ** matriz_img, pixel color){
   printf("%d %d %d\n", color.r, color.g, color.b);
@@ -26,67 +59,59 @@ void desenhar_linha (int x1, int y1, int x2, int y2,pixel ** matriz_img, pixel c
 
         if(deltaX < 0) // caso ponto final < ponto inicial
         {
-            desenhar_linha(x2, y2, x1, y1, matriz_img, color);
+          desenhar_linha(x2, y2, x1, y1, matriz_img, color);
         }
 
         if(deltaY < 0){
-            inclinacao = -1;
+          inclinacao = -1;
         }
         else{
-            inclinacao = 1;
+          inclinacao = 1;
         }
 
         if(deltaX >= inclinacao*deltaY) {    // m<=1
-            if(deltaY<0){ // caso y2<y1
-                d = 2*deltaY+deltaX;
-                while(x<x2){
-                    if(d<0){
-                        d += 2*(deltaY+deltaX);
-                        x++;
-                        y--;
-                        printf("A X = %d || Y = %d\n",x - 1,y - 1);
-                        /*matriz_img[y - 1][x - 1].r = color.r;
-                        matriz_img[y - 1][x - 1].g = color.g;
-                        matriz_img[y - 1][x - 1].b = color.b;*/
-                        pintapixel(x , y, matriz_img, color);
-                    }
-                    else{
-                        d+=2*deltaY;
-                        x++; // varia apenas no eixo x
-                        printf("B X = %d || Y = %d\n",x - 1,y - 1);
-                        /*matriz_img[y - 1][x - 1].r = color.r;
-                        matriz_img[y - 1][x - 1].g = color.g;
-                        matriz_img[y - 1][x - 1].b = color.b;*/
-                        pintapixel(x , y, matriz_img, color);
-                    }
-                }
+          if(deltaY<0){ // caso y2<y1
+            d = 2*deltaY+deltaX;
+            while(x<x2){
+              if(d<0){
+                d += 2*(deltaY+deltaX);
+                x++;
+                y--;
+                //printf("A X = %d || Y = %d\n",x - 1,y - 1);
+                        
+                pintapixel(x , y, matriz_img, color);
+              }
+              else{
+                d+=2*deltaY;
+                x++; // varia apenas no eixo x
+                //printf("B X = %d || Y = %d\n",x - 1,y - 1);
+                        
+                pintapixel(x , y, matriz_img, color);
+              }
             }
-            else{ // caso y1<y2
-                d=2*deltaY-deltaX;
-                while(x<x2){
-                    if(d<0){
-                        d+=2*deltaY;
-                        x++; // varia apenas no eixo x
-                        printf("C X = %d || Y = %d\n",x - 1,y - 1);
-                        /*matriz_img[y - 1][x - 1].r = color.r;
-                        matriz_img[y - 1][x - 1].g = color.g;
-                        matriz_img[y - 1][x - 1].b = color.b;*/
-                        pintapixel(x , y, matriz_img, color);
+          }
+          else{ // caso y1<y2
+            d=2*deltaY-deltaX;
+            while(x<x2){
+              if(d<0){
+                d+=2*deltaY;
+                x++; // varia apenas no eixo x
+                //printf("C X = %d || Y = %d\n",x - 1,y - 1);
+                        
+                pintapixel(x , y, matriz_img, color);
 
-                    }
-                    else{
-                        d+=2*(deltaY-deltaX);
-                        x++;
-                        y++;
-                        printf("D X = %d || Y = %d\n",x - 1,y - 1);
-                        /*matriz_img[y - 1][x - 1].r = color.r;
-                        matriz_img[y - 1][x - 1].g = color.g;
-                        matriz_img[y - 1][x - 1].b = color.b;*/
-                        pintapixel(x , y, matriz_img, color);
+              }
+              else{
+                d+=2*(deltaY-deltaX);
+                x++;
+                y++;
+                //printf("D X = %d || Y = %d\n",x - 1,y - 1);
+                        
+                pintapixel(x , y, matriz_img, color);
 
-                    }
-                }
+              }
             }
+          }
         }
     else{ // |m|>1
         if(deltaY<0){ // caso y2<y1
@@ -95,20 +120,16 @@ void desenhar_linha (int x1, int y1, int x2, int y2,pixel ** matriz_img, pixel c
                 if(d<0){
                     d += 2*deltaX;
                     y--; // varia apenas no eixo y
-                    printf("E X = %d || Y = %d\n",x - 1,y - 1);
-                    /*matriz_img[y - 1][x - 1].r = color.r;
-                    matriz_img[y - 1][x - 1].g = color.g;
-                    matriz_img[y - 1][x - 1].b = color.b;*/
+                    //printf("E X = %d || Y = %d\n",x - 1,y - 1);
+                  
                     pintapixel(x , y, matriz_img, color);
                 }
                 else{
                     d+=2*(deltaY+deltaX);
                     x++;
                     y--;
-                    printf("F X = %d || Y = %d\n",x - 1,y - 1);
-                    /*matriz_img[y - 1][x - 1].r = color.r;
-                    matriz_img[y - 1][x - 1].g = color.g;
-                    matriz_img[y - 1][x - 1].b = color.b;*/
+                    //printf("F X = %d || Y = %d\n",x - 1,y - 1);
+                   
                     pintapixel(x , y, matriz_img, color);
                 }
             }
@@ -120,19 +141,15 @@ void desenhar_linha (int x1, int y1, int x2, int y2,pixel ** matriz_img, pixel c
                     d+=2*(deltaY-deltaX);
                     x++;
                     y++;
-                    printf("G X = %d || Y = %d\n",x - 1,y - 1);
-                    /*matriz_img[y - 1][x - 1].r = color.r;
-                    matriz_img[y - 1][x - 1].g = color.g;
-                    matriz_img[y - 1][x - 1].b = color.b;*/
+                    //printf("G X = %d || Y = %d\n",x - 1,y - 1);
+                    
                     pintapixel(x , y, matriz_img, color);
                 }
                 else{
                     d+=(-2)*deltaX;
                     y++; // varia apenas no eixo y
-                    printf("H X = %d || Y = %d\n",x - 1,y - 1);
-                    /*matriz_img[y - 1][x - 1].r = color.r;
-                    matriz_img[y - 1][x - 1].g = color.g;
-                    matriz_img[y - 1][x - 1].b = color.b;*/
+                    //printf("H X = %d || Y = %d\n",x - 1,y - 1);
+                    
                     pintapixel(x , y, matriz_img, color);
                 }
             }
@@ -147,27 +164,40 @@ void poligono(int * vetor_x, int * vetor_y,img imagem, pixel ** matriz_img, pixe
   }
 }
 
+void preencher(int x, int y, pixel ** matriz_img, pixel ver,pixel color){
+  printf("%d %d\n", x, y);
+  
+  if (matriz_img[y][x].r == ver.r && matriz_img[y][x].g == ver.g && matriz_img[y][x].b == ver.b){
+    
+    pintapixel(x , y , matriz_img, color);
+    preencher(x, y + 1, matriz_img, ver, color);
+    preencher(x + 1, y, matriz_img, ver, color);
+    preencher(x - 1, y, matriz_img, ver, color);
+    preencher(x, y - 1, matriz_img, ver, color);
+  }
+  
+}
+
 void circle(int x_c, int y_c, int r, pixel ** matriz_img, pixel color){
     int x = r, y = 0; 
       
     // Imprimir o ponto inicial nos eixos  
-    // after translation 
     printf("ponto inicial X = %d || Y = %d \n", x + x_c, y + y_c);
 
    
     // espelhando pontos iniciais 
     if (r > 0) 
     { 
-      printf("A X = %d || Y = %d \n", x + x_c, -y + y_c);
+     
       pintapixel(x + x_c , -y + y_c, matriz_img, color);
       
-      printf("B X = %d || Y = %d \n", y + x_c, x + y_c); 
+     
       pintapixel(y + x_c , x + y_c, matriz_img, color);
       
-      printf("C X = %d || Y = %d \n", -x + x_c, y + y_c);
+      
       pintapixel(-x + x_c , y + y_c, matriz_img, color); 
     
-      printf("D X = %d || Y = %d \n", y + x_c, -x + y_c);
+      
       pintapixel(y + x_c , -x + y_c , matriz_img, color);
     } 
       
@@ -195,32 +225,32 @@ void circle(int x_c, int y_c, int r, pixel ** matriz_img, pixel color){
           
         // ponto gerado e espelhando nos octantes 
          
-        printf("E X = %d || Y = %d \n", x + x_c, y + y_c); 
+        ; 
         pintapixel(x + x_c , y + y_c, matriz_img, color);
         
-        printf("F X = %d || Y = %d \n", -x + x_c, y + y_c); 
+        
         pintapixel(-x + x_c , y + y_c, matriz_img, color);
         
-        printf("G X = %d || Y = %d \n", x + x_c, -y + y_c); 
+        
         pintapixel(x + x_c , -y + y_c, matriz_img, color);
         
-        printf("H X = %d || Y = %d\n", -x + x_c, -y + y_c); 
+        
         pintapixel(-x + x_c , -y + y_c, matriz_img, color);  
         
         //Se o ponto gerado estiver na linha x = y, então
         // os pontos de perímetro já foram impressos
         if (x != y) 
         { 
-            printf("I X = %d || Y = %d \n", y + x_c, x + y_c);
+            
             pintapixel(y + x_c , x + y_c, matriz_img, color);
 
-            printf("J X = %d || Y = %d \n", -y + x_c, x + y_c); 
+             
             pintapixel(-y + x_c , x + y_c, matriz_img, color);
 
-            printf("L X = %d || Y = %d \n", y + x_c, -x + y_c); 
+           
             pintapixel(y + x_c , -x + y_c, matriz_img, color);
 
-            printf("M X = %d || Y = %d\n", -y + x_c, -x + y_c); 
+            
             pintapixel(-y + x_c , -x + y_c, matriz_img, color);
         } 
     }  
@@ -230,7 +260,7 @@ void circle(int x_c, int y_c, int r, pixel ** matriz_img, pixel color){
 
 //FUNÇÃO PARA PINTAR CADA PIXEL
 void pintapixel(int x, int y, pixel ** matriz_img, pixel color){
-    matriz_img[y - 1][x - 1].r = color.r;
-    matriz_img[y - 1][x - 1].g = color.g;
-    matriz_img[y - 1][x - 1].g = color.b;
+    matriz_img[y ][x ].r = color.r;
+    matriz_img[y][x ].g = color.g;
+    matriz_img[y ][x ].b = color.b;
 }

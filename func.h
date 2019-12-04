@@ -12,10 +12,11 @@ typedef struct{
 }pixel;
 
 typedef struct{
-    char formato_img[3];
-    int altura, coluna, color_max;
-    char acao[10];
-    int x1, x2, y1, y2;
+  char formato_img[3];
+  int altura, coluna, color_max;
+  char acao[10];
+  int x1, x2, y1, y2;
+  char nome_imagem[carct];
 
 }img;
 typedef struct{
@@ -23,10 +24,14 @@ typedef struct{
 }circ;
 
 void imag();
+void clr();
+void i_cor();
+void preencher();
 void desenhar_linha();
 void poligono();
 void circle();
 void pintapixel();
+void save();
 
 
 
